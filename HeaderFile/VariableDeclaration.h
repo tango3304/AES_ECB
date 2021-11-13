@@ -117,7 +117,7 @@ char Encryption_FilePATH[] = "TestFile/Encryption_FilePATH.txt"; //暗号化テ�
 unsigned char Encryption_Value[4][4];
 //【復号化】
 FILE *Decryption_Fwrite; //復号化を書き込む
-char Decryption_FilePATH[] = "TestFile/Decryption_FilePATH.txt"; //暗号化テキスト
+char Decryption_FilePATH[] = "TestFile/Decryption_FilePATH.txt"; //復号化テキスト
 unsigned char Decryption_Value[4][4];
 //【暗号化＆復号化】
 int Fwrite_Vertical_COUNT;
