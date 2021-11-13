@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 #include "HeaderFile/FunctionDeclaration.h"//関数宣言
 #include "HeaderFile/VariableDeclaration.h"//変数宣言
 #include "SourceFile/SubBytes.c"//SubBytesの処理が記載
@@ -8,10 +9,22 @@
 #include "SourceFile/AddRoundKey.c"//AddRoundKeyの処理が記載
 #define FILE_READ_SIZE (17)
 
+
+
 //================
 //AES暗号処理
 //================
 int main(){
+    FreeConsole(); //実行時にコマンドプロンプトを表示しない
+
+    //多重起動制御
+    hMSP = CreateMutex(NULL, TRUE, "DoubleStartPrevention");
+    if(GetLastError() == ERROR_ALREADY_EXISTS){
+        ReleaseMutex(hMSP);
+        CloseHandle(hMSP);
+        return FALSE;
+    }
+
     //ポインタ関数の変数宣言
     P_Encryption_SBOX_CHANGE = Encryption_SBOX_CHANGE; //S-BOX表の値に変換処理の関数
     P_MixColumns_MDS_xor_0x02or01 = MixColumns_MDS_xor_0x02or01; //0x02と0x01計算処理の関数
@@ -39,11 +52,8 @@ int main(){
 
             //KeyFile.txtが16バイトの値でない場合の処理
             if(Key_FRead_COUNT != 16){
-                printf("%s\n", "########################################");
-                printf("%s\n", "# 規定値の16byteではありません         #");
-                printf("%s\n", "#                                      #");
-                printf("%s\n", "# KeyFile.txtを確認してください        #");
-                printf("%s\n", "########################################");
+                //メッセージボックスを最前面で表示
+                MessageBox(NULL, "　規定値の16byteではありません!!!\n\n　 KeyFile.txtを確認してください!!!", "共通鍵の値エラー", MB_OK | MB_ICONERROR | MB_TOPMOST);
                 exit (0); //強制終了
             }
 
@@ -237,7 +247,6 @@ int main(){
         for(Fwrite_Vertical_COUNT = 0; Fwrite_Vertical_COUNT < 4; Fwrite_Vertical_COUNT++){
             for(Fwrite_Beside_COUNT = 0; Fwrite_Beside_COUNT < 4; Fwrite_Beside_COUNT++){
                 Encryption_Value[Fwrite_Vertical_COUNT][Fwrite_Beside_COUNT] = (char)State[Fwrite_Vertical_COUNT][Fwrite_Beside_COUNT];
-                printf("Encryption_Value[%d][%d]：%02x\n", Fwrite_Vertical_COUNT, Fwrite_Beside_COUNT, Encryption_Value[Fwrite_Vertical_COUNT][Fwrite_Beside_COUNT]);
                 fprintf(Fwrite, "%c", Encryption_Value[Fwrite_Vertical_COUNT][Fwrite_Beside_COUNT]); //ファイルに書き込む
             }
         }
@@ -247,4 +256,8 @@ int main(){
     }//【 暗号対象のファイルの読み取り処理 】の終わり
 
     fclose(Fread); //対象ファイルの読み込み終了
+
+    //多重起動制御（解放）
+    ReleaseMutex(hMSP);
+    CloseHandle(hMSP);
 }
