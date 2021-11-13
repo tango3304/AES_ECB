@@ -9,8 +9,6 @@
 #include "SourceFile/AddRoundKey.c"//AddRoundKeyの処理が記載
 #define FILE_READ_SIZE (17)
 
-
-
 //================
 //AES暗号処理
 //================
