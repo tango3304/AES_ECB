@@ -8,6 +8,9 @@
 /*main関数の全体の処理回数*/
 int OverallProcessing = 0;
 
+/*多重起動制御のハンドル設定*/
+HANDLE hMSP;
+
 /*ポインタ関数の変数宣言*/
 //【暗号化】
 int (* P_Encryption_SBOX_CHANGE)(int); //S-BOX表の値に変換処理の関数ポインタ
@@ -114,7 +117,7 @@ char Encryption_FilePATH[] = "TestFile/Encryption_FilePATH.txt"; //暗号化テ�
 unsigned char Encryption_Value[4][4];
 //【復号化】
 FILE *Decryption_Fwrite; //復号化を書き込む
-char Decryption_FilePATH[] = "TestFile/Decryption_FilePATH.txt"; //復号化テキスト
+char Decryption_FilePATH[] = "TestFile/Decryption_FilePATH.txt"; //暗号化テキスト
 unsigned char Decryption_Value[4][4];
 //【暗号化＆復号化】
 int Fwrite_Vertical_COUNT;
