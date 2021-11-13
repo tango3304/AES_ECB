@@ -1,7 +1,7 @@
 #ifndef Variable_IncludeGuard
 #define Variable_IncludeGuard
-//変数宣言
 
+//変数宣言
 //=======================
 //commonkey.c
 //=======================
